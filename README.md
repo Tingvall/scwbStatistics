@@ -28,3 +28,9 @@ returns `assoc_summary` plus `group_stats`. `cell_vector_association` is a
 semantically distinct typed dispatcher supporting categorical/categorical,
 continuous/categorical, and continuous/continuous inputs and returns `summary`
 plus method-specific `detail`. Neither operation is an alias.
+
+`feature_trend_spearman` partitions the manifest-bound feature sequence into
+contiguous batches no larger than `chunk_size`, performs one typed matrix read
+per batch, merges in feature order, and applies `p_adjust_method` once to the
+complete merged universe. Core authenticates this declaration and retains its
+own observed reader-call batches before permitting publication.

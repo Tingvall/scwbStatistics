@@ -8,10 +8,11 @@ stopifnot(identical(activated$identity$pack_sha256, again$identity$pack_sha256))
 bundle <- wb_init_bundle(tempfile("scwbStatistics-contract-"))
 execute <- getFromNamespace(".wb_operation_pack_v2_execute", "scworkbench")
 cells <- paste0("cell_", sprintf("%02d", 1:12))
-features <- paste0("gene_", 1:4)
+features <- paste0("gene_", 1:5)
 values <- matrix(c(
-  0:11, 11:0, rep(c(0, 1), 6), rep(c(4, 2, 0), 4)
-), nrow = 4L, byrow = TRUE, dimnames = list(features, cells))
+  0:11, 11:0, rep(c(0, 1), 6), rep(c(4, 2, 0), 4),
+  c(0, 0, 1, 0, 2, 1, 3, 1, 5, 2, 8, 3)
+), nrow = 5L, byrow = TRUE, dimnames = list(features, cells))
 matrix_input <- structure(list(kind = "matrix", matrix_id = "fixture_matrix",
   values = values, dimensions = as.integer(dim(values)), cell_id = cells,
   feature_id = features, storage_profile = "matrix_ordinary_v1"),
@@ -33,7 +34,7 @@ expect_code <- function(expr, code) {
 de <- run("de_wilcox", list(matrix = matrix_input), list(
   group_a = as.list(cells[1:6]), group_b = as.list(cells[7:12]),
   min_pct = 0, p_adjust_method = "BH"))
-stopifnot(nrow(de$outputs$de_table$table) == 4L)
+stopifnot(nrow(de$outputs$de_table$table) == 5L)
 
 markers <- run("markers_topn", list(matrix = matrix_input, clusters = groups),
   list(top_n = 2L, min_pct = 0, p_adjust_method = "BH"))
@@ -106,6 +107,18 @@ trend_b <- run("feature_trend_spearman", list(matrix = matrix_input,
   p_adjust_method = "BH", chunk_size = 128L))
 stopifnot(identical(trend_a$outputs$trend_table$table,
   trend_b$outputs$trend_table$table))
+stopifnot(identical(trend_a$reader_observation$observed_batches,
+  list(features[1:2], features[3:4], features[5])))
+stopifnot(identical(as.integer(trend_a$reader_observation$observed_batch_sizes),
+  c(2L, 2L, 1L)))
+stopifnot(identical(as.integer(trend_b$reader_observation$observed_call_count), 1L),
+  identical(trend_b$reader_observation$observed_batches, list(features)))
+trend_order <- match(features, trend_a$outputs$trend_table$table$feature_id)
+raw_p <- trend_a$outputs$trend_table$table$p_val[trend_order]
+incorrect_chunk_adjustment <- unlist(lapply(split(raw_p,
+  ceiling(seq_along(raw_p) / 2L)), stats::p.adjust, method = "BH"), use.names = FALSE)
+stopifnot(any(abs(trend_a$outputs$trend_table$table$p_val_adj[trend_order] -
+  incorrect_chunk_adjustment) > 1e-15))
 
 empty_matrix <- matrix_input
 empty_matrix$values[] <- 0

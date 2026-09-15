@@ -52,13 +52,25 @@ compare_component <- function(name, left, right) {
   list(name = name, passed = identical(left, right))
 }
 
+legacy_params <- function(value) {
+  if (is.list(value$chunking)) {
+    if (!isTRUE(value$chunking$enabled)) value$chunking <- NULL else
+      value$chunking <- value$chunking[c("enabled", "axis", "chunk_size", "n_chunks")]
+  }
+  value[sort(names(value), method = "radix")]
+}
+
 interface_checks <- Map(function(name, left, right) {
   compare_component(name, left, right)
 }, names(old$interfaces), old$interfaces, new$interfaces)
 case_checks <- lapply(names(old$cases), function(name) {
   fields <- c("inputs", "effective_params", "outputs", "output_identities")
   checks <- lapply(fields, function(field) {
-    compare_component(field, old$cases[[name]][[field]], new$cases[[name]][[field]])
+    left <- old$cases[[name]][[field]]; right <- new$cases[[name]][[field]]
+    if (identical(field, "effective_params")) {
+      left <- legacy_params(left); right <- legacy_params(right)
+    }
+    compare_component(field, left, right)
   })
   list(name = name, passed = all(vapply(checks, `[[`, logical(1), "passed")),
     fields = checks, output_identities = new$cases[[name]]$output_identities)
@@ -68,9 +80,17 @@ trend_policy <- identical(
   new$cases$feature_trend_chunked$output_identities,
   new$cases$feature_trend_unchunked$output_identities
 )
+chunk_trace <- new$cases$feature_trend_chunked$effective_params$chunking
+unchunked_trace <- new$cases$feature_trend_unchunked$effective_params$chunking
+trace_policy <- identical(chunk_trace$observed_batches,
+    list(c("gene_1", "gene_2"), c("gene_3", "gene_4"), "gene_5")) &&
+  identical(as.integer(chunk_trace$observed_batch_sizes), c(2L, 2L, 1L)) &&
+  identical(as.integer(chunk_trace$observed_call_count), 3L) &&
+  identical(unchunked_trace$observed_batches, list(paste0("gene_", 1:5))) &&
+  identical(as.integer(unchunked_trace$observed_call_count), 1L)
 passed <- identical(old$fixture_identity, new$fixture_identity) &&
   all(vapply(interface_checks, `[[`, logical(1), "passed")) &&
-  all(vapply(case_checks, `[[`, logical(1), "passed")) && trend_policy
+  all(vapply(case_checks, `[[`, logical(1), "passed")) && trend_policy && trace_policy
 
 evidence <- list(
   schema_version = "scwbStatistics.phase3a.equivalence.v1",
@@ -94,6 +114,9 @@ evidence <- list(
   execution_checks = case_checks,
   terminal_policy_checks = list(
     feature_trend_chunked_equals_unchunked = trend_policy,
+    core_observed_reader_trace = trace_policy,
+    chunked = chunk_trace,
+    unchunked = unchunked_trace,
     policy = "exact_canonical_value"
   )
 )

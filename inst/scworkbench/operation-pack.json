@@ -16,20 +16,40 @@
       "qualified_name": "scwbstatistics::de_wilcox",
       "title": "Differential Expression (Wilcoxon)",
       "description": "Wilcoxon rank-sum DE between two cell groups (A vs B).",
+      "public_interface": {"intent": ["de", "markers", "comparison"], "inputs": [], "parameters": [
+        {"name": "group_a", "type": "cell_ids_or_set", "help": "Group A cells: vector of cell IDs or 'set:<name>'."},
+        {"name": "group_b", "type": "cell_ids_or_set", "help": "Group B cells: vector of cell IDs or 'set:<name>'."},
+        {"name": "features", "type": "string_vec", "help": "Optional feature subset."},
+        {"name": "min_pct", "type": "dbl", "help": "Minimum detection fraction in either group."},
+        {"name": "p_adjust_method", "type": "string", "help": "Method passed to p.adjust."}
+      ], "outputs": [{"name": "de_table", "description": "Feature-level DE statistics table."}]},
       "runner": ".run_de_wilcox",
       "inputs": [{"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"}],
       "params_schema": {
         "type": "object",
         "properties": {
-          "group_a": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-          "group_b": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "group_a": {"type": ["array", "null"], "default": null, "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "group_b": {"type": ["array", "null"], "default": null, "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
           "features": {"type": ["array", "null"], "default": null, "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
           "min_pct": {"type": "number", "default": 0, "minimum": 0, "maximum": 1},
           "p_adjust_method": {"type": "string", "default": "BH", "minLength": 1}
         },
-        "required": ["group_a", "group_b"],
         "additionalProperties": false
       },
+      "parameter_bindings": [
+        {"parameter": "group_a", "policy": "cell_ids_or_set_v1", "input": "matrix"},
+        {"parameter": "group_b", "policy": "cell_ids_or_set_v1", "input": "matrix"},
+        {"parameter": "features", "policy": "feature_ids_or_all_v1", "input": "matrix"}
+      ],
+      "dimension_policies": [{"output": "de_table", "policy": "data_dependent_table_v1"}],
+      "retained_parameters": [
+        {"name": "matrix_id", "source": "output_meta", "output": "de_table", "field": "matrix_id"},
+        {"name": "n_features", "source": "output_row_count", "output": "de_table"},
+        {"name": "n_cells_a", "source": "output_meta", "output": "de_table", "field": "n_cells_a"},
+        {"name": "n_cells_b", "source": "output_meta", "output": "de_table", "field": "n_cells_b"},
+        {"name": "min_pct", "source": "parameter_value", "parameter": "min_pct"},
+        {"name": "p_adjust_method", "source": "parameter_value", "parameter": "p_adjust_method"}
+      ],
       "outputs": [{"name": "de_table", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "de_table_id", "required": true, "promotion_group": "de_table", "table_type": "de_wilcox"}],
       "dependencies": [
         {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},
@@ -42,7 +62,13 @@
       "name": "markers_topn",
       "qualified_name": "scwbstatistics::markers_topn",
       "title": "Top Markers Per Cluster",
-      "description": "One-versus-rest Wilcoxon marker ranking for each cluster.",
+      "description": "One-vs-rest Wilcoxon marker ranking for each cluster.",
+      "public_interface": {"intent": ["markers", "cluster"], "inputs": [], "parameters": [
+        {"name": "features", "type": "string_vec", "help": "Optional feature subset."},
+        {"name": "top_n", "type": "int", "help": "Top markers retained per cluster."},
+        {"name": "min_pct", "type": "dbl", "help": "Minimum detection fraction in either group."},
+        {"name": "p_adjust_method", "type": "string", "help": "Method passed to p.adjust."}
+      ], "outputs": [{"name": "markers", "description": "Cluster-marker table with per-feature statistics."}]},
       "runner": ".run_markers_topn",
       "inputs": [
         {"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"},
@@ -58,6 +84,15 @@
         },
         "additionalProperties": false
       },
+      "parameter_bindings": [{"parameter": "features", "policy": "feature_ids_or_all_v1", "input": "matrix"}],
+      "dimension_policies": [{"output": "markers", "policy": "data_dependent_table_v1"}],
+      "retained_parameters": [
+        {"name": "matrix_id", "source": "output_meta", "output": "markers", "field": "matrix_id"},
+        {"name": "n_clusters", "source": "output_meta", "output": "markers", "field": "n_clusters"},
+        {"name": "n_features_requested", "source": "parameter_count", "parameter": "features"},
+        {"name": "feature_subset_supplied", "source": "parameter_supplied", "parameter": "features"},
+        {"name": "n_markers", "source": "output_row_count", "output": "markers"}
+      ],
       "outputs": [{"name": "markers", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "markers_id", "required": true, "promotion_group": "markers", "table_type": "markers_topn"}],
       "dependencies": [
         {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},
@@ -71,12 +106,27 @@
       "qualified_name": "scwbstatistics::cell_vector_assoc",
       "title": "Cell Vector Association",
       "description": "Test whether a continuous cell-level signal differs across groups defined by a categorical cell-level vector.",
+      "public_interface": {"intent": ["statistics", "association", "confounding"], "inputs": [
+        {"name": "vector_cont", "label": "Continuous vector (numeric per cell)", "help": "Examples: pseudotime, module score, gene-program score."},
+        {"name": "vector_group", "label": "Grouping vector (categorical per cell)", "help": "Examples: cluster labels, cell type labels, condition labels."}
+      ], "parameters": [{"name": "min_n_per_group", "type": "int", "help": "Minimum cells per group."}], "outputs": [
+        {"name": "assoc_summary", "description": "Omnibus association test summary (Kruskal/ANOVA)."},
+        {"name": "group_stats", "description": "Per-group descriptive statistics."}
+      ]},
       "runner": ".run_cell_vector_assoc",
       "inputs": [
         {"name": "vector_cont", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
         {"name": "vector_group", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
       ],
       "params_schema": {"type": "object", "properties": {"min_n_per_group": {"type": "integer", "default": 3, "minimum": 1, "maximum": 100000}}, "additionalProperties": false},
+      "dimension_policies": [
+        {"output": "assoc_summary", "policy": "data_dependent_table_v1"},
+        {"output": "group_stats", "policy": "data_dependent_table_v1"}
+      ],
+      "retained_parameters": [
+        {"name": "n_cells", "source": "output_first_row", "output": "assoc_summary", "field": "n_cells"},
+        {"name": "n_groups", "source": "output_first_row", "output": "assoc_summary", "field": "n_groups"}
+      ],
       "outputs": [
         {"name": "assoc_summary", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "assoc_summary_id", "required": true, "promotion_group": "assoc_summary", "table_type": "cell_vector_assoc"},
         {"name": "group_stats", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "group_stats_id", "required": true, "promotion_group": "group_stats", "table_type": "cell_vector_assoc_group_stats"}
@@ -93,12 +143,33 @@
       "qualified_name": "scwbstatistics::cell_vector_association",
       "title": "Cell Vector Association",
       "description": "Associate two typed cell vectors with categorical and continuous dispatch.",
+      "public_interface": {"intent": ["statistics", "association", "confounding"], "inputs": [
+        {"name": "a", "label": "First vector", "help": "Categorical or continuous cell vector."},
+        {"name": "b", "label": "Second vector", "help": "Categorical or continuous cell vector."}
+      ], "parameters": [
+        {"name": "cell_set", "type": "cell_set", "help": "Named bundle cell set defining the association universe."},
+        {"name": "min_n_per_group", "type": "int", "help": "Minimum cells per retained categorical group."},
+        {"name": "method", "type": "choice", "help": "Association method or typed automatic dispatch."}
+      ], "outputs": [
+        {"name": "summary", "description": "Typed association summary including method, effect size, and diagnostics."},
+        {"name": "detail", "description": "Contingency, group-statistic, or per-cell association detail appropriate to the dispatched test."}
+      ]},
       "runner": ".run_cell_vector_association",
       "inputs": [
         {"name": "a", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
         {"name": "b", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
       ],
-      "params_schema": {"type": "object", "properties": {"min_n_per_group": {"type": "integer", "default": 3, "minimum": 1, "maximum": 100000}, "method": {"type": "string", "default": "auto", "enum": ["auto", "chisq", "fisher", "kruskal_anova", "correlation"]}}, "additionalProperties": false},
+      "params_schema": {"type": "object", "properties": {"cell_set": {"type": "string", "default": "all", "minLength": 1}, "min_n_per_group": {"type": "integer", "default": 3, "minimum": 1, "maximum": 100000}, "method": {"type": "string", "default": "auto", "enum": ["auto", "chisq", "fisher", "kruskal_anova", "correlation"]}}, "additionalProperties": false},
+      "dimension_policies": [
+        {"output": "summary", "policy": "data_dependent_table_v1"},
+        {"output": "detail", "policy": "data_dependent_table_v1"}
+      ],
+      "retained_parameters": [
+        {"name": "association_type", "source": "output_first_row", "output": "summary", "field": "association_type"},
+        {"name": "method", "source": "output_first_row", "output": "summary", "field": "method"},
+        {"name": "n_cells", "source": "output_first_row", "output": "summary", "field": "n_cells"},
+        {"name": "n_groups", "source": "output_first_row", "output": "summary", "field": "n_groups", "required": false}
+      ],
       "outputs": [
         {"name": "summary", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "summary_id", "required": true, "promotion_group": "summary", "table_type": "cell_vector_association_summary"},
         {"name": "detail", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "detail_id", "required": true, "promotion_group": "detail", "table_type": "cell_vector_association_detail"}
@@ -115,12 +186,29 @@
       "qualified_name": "scwbstatistics::cell_vector_compare",
       "title": "Cell Vector Comparison",
       "description": "Compare two cell-level signals on their shared cell universe in raw or rank space.",
+      "public_interface": {"intent": ["statistics", "comparison", "signal"], "inputs": [
+        {"name": "a", "label": "Signal A", "help": "Continuous or rankable numeric signal per cell."},
+        {"name": "b", "label": "Signal B", "help": "Continuous or rankable numeric signal per cell."}
+      ], "parameters": [
+        {"name": "compare_space", "type": "choice", "help": "Whether to compare original numeric values or cell ranks."},
+        {"name": "ties_method", "type": "choice", "help": "Tie handling rule used when compare_space='rank'."},
+        {"name": "signal_a", "type": "string", "help": "Optional label recorded in the summary table for signal A."},
+        {"name": "signal_b", "type": "string", "help": "Optional label recorded in the summary table for signal B."}
+      ], "outputs": [
+        {"name": "summary", "description": "One-row comparison summary with concordance and delta metrics."},
+        {"name": "comparison", "description": "Per-cell comparison table with original values, compared values, and deltas."}
+      ]},
       "runner": ".run_cell_vector_compare",
       "inputs": [
         {"name": "a", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
         {"name": "b", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
       ],
       "params_schema": {"type": "object", "properties": {"compare_space": {"type": "string", "default": "rank", "enum": ["raw", "rank"]}, "ties_method": {"type": "string", "default": "average", "enum": ["average", "first", "last", "random", "max", "min"]}, "signal_a": {"type": "string", "default": "a", "minLength": 1}, "signal_b": {"type": "string", "default": "b", "minLength": 1}}, "additionalProperties": false},
+      "dimension_policies": [
+        {"output": "summary", "policy": "data_dependent_table_v1"},
+        {"output": "comparison", "policy": "data_dependent_table_v1"}
+      ],
+      "retained_parameters": [{"name": "n_shared_cells", "source": "output_row_count", "output": "comparison"}],
       "outputs": [
         {"name": "summary", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "summary_id", "required": true, "promotion_group": "summary", "table_type": "cell_vector_compare_summary"},
         {"name": "comparison", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "comparison_id", "required": true, "promotion_group": "comparison", "table_type": "cell_vector_compare"}
@@ -137,12 +225,35 @@
       "qualified_name": "scwbstatistics::feature_trend_spearman",
       "title": "Feature Trends vs Continuous Vector",
       "description": "Feature-level Spearman trend testing against continuous pseudotime-like vectors.",
+      "public_interface": {"intent": ["trend", "statistics", "trajectory"], "inputs": [], "parameters": [
+        {"name": "features", "type": "string_vec", "help": "Optional feature subset."},
+        {"name": "min_pct_nonzero", "type": "dbl", "help": "Minimum non-zero fraction filter."},
+        {"name": "min_sd", "type": "dbl", "help": "Minimum per-feature standard deviation filter."},
+        {"name": "p_adjust_method", "type": "string", "help": "Method passed to p.adjust."},
+        {"name": "chunk_size", "type": "int", "help": "Chunk size for matrix slicing."}
+      ], "outputs": [{"name": "trend_table", "description": "Per-feature trend statistics (rho, p, adjusted p)."}]},
       "runner": ".run_feature_trend_spearman",
       "inputs": [
         {"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"},
         {"name": "pseudotime", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
       ],
       "params_schema": {"type": "object", "properties": {"features": {"type": ["array", "null"], "default": null, "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "min_pct_nonzero": {"type": "number", "default": 0, "minimum": 0, "maximum": 1}, "min_sd": {"type": "number", "default": 0, "minimum": 0, "maximum": 1000000}, "p_adjust_method": {"type": "string", "default": "BH", "minLength": 1}, "chunk_size": {"type": "integer", "default": 128, "minimum": 1, "maximum": 4096}}, "additionalProperties": false},
+      "parameter_bindings": [{"parameter": "features", "policy": "feature_ids_or_all_v1", "input": "matrix"}],
+      "dimension_policies": [{"output": "trend_table", "policy": "data_dependent_table_v1"}],
+      "chunking": {"axis": "features", "input": "matrix", "sequence_parameter": "features", "size_parameter": "chunk_size", "output": "trend_table", "merge": "row_bind_then_global_p_adjust_v1", "adjust_parameter": "p_adjust_method"},
+      "retained_parameters": [
+        {"name": "matrix_id", "source": "output_meta", "output": "trend_table", "field": "matrix_id"},
+        {"name": "n_cells_input", "source": "output_meta", "output": "trend_table", "field": "n_cells_input"},
+        {"name": "n_cells_used", "source": "output_meta", "output": "trend_table", "field": "n_cells_used"},
+        {"name": "n_features_input", "source": "output_meta", "output": "trend_table", "field": "n_features_input"},
+        {"name": "n_features_tested", "source": "output_meta", "output": "trend_table", "field": "n_features_tested"},
+        {"name": "min_pct_nonzero", "source": "output_meta", "output": "trend_table", "field": "min_pct_nonzero"},
+        {"name": "min_sd", "source": "output_meta", "output": "trend_table", "field": "min_sd"},
+        {"name": "p_adjust_method", "source": "output_meta", "output": "trend_table", "field": "p_adjust_method"},
+        {"name": "n_filtered_min_cells", "source": "output_meta", "output": "trend_table", "field": "n_filtered_min_cells"},
+        {"name": "n_filtered_min_pct_nonzero", "source": "output_meta", "output": "trend_table", "field": "n_filtered_min_pct_nonzero"},
+        {"name": "n_filtered_min_sd", "source": "output_meta", "output": "trend_table", "field": "n_filtered_min_sd"}
+      ],
       "outputs": [{"name": "trend_table", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "trend_table_id", "required": true, "promotion_group": "trend_table", "table_type": "feature_trend_spearman"}],
       "dependencies": [
         {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},

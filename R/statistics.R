@@ -243,29 +243,42 @@
   keep <- is.finite(pt); pt <- pt[keep]
   .assert(length(pt)>=10L && stats::sd(pt)>0, "feature_trend_spearman requires ten finite non-constant pseudotime values.")
   features <- .param(params,"features"); if(!is.null(features)) features <- .chars(features)
-  view <- .matrix_view(readers$matrix, features=features, cells=names(pt)); matrix <- as.matrix(view$values)
+  chunk_size <- as.integer(.param(params,"chunk_size",128L))[[1]]
+  .assert(is.finite(chunk_size) && chunk_size >= 1L, "chunk_size must be a positive integer.")
+  if (is.null(features)) {
+    probe <- .matrix_view(readers$matrix, cells=names(pt))
+    features <- as.character(probe$feature_id %||% rownames(probe$values))
+    chunks <- list(probe)
+  } else {
+    groups <- split(features, ceiling(seq_along(features) / chunk_size))
+    chunks <- lapply(groups, function(batch) .matrix_view(readers$matrix,
+      features=batch, cells=names(pt)))
+  }
   minimum_pct <- as.numeric(.param(params,"min_pct_nonzero",0)); minimum_sd <- as.numeric(.param(params,"min_sd",0))
   filtered_cells <- 0L; filtered_pct <- 0L; filtered_sd <- 0L
-  rows <- lapply(seq_len(nrow(matrix)), function(index) {
-    y <- as.numeric(matrix[index,]); ok <- is.finite(y) & is.finite(pt)
-    if(sum(ok)<10L) { filtered_cells <<- filtered_cells + 1L; return(NULL) }
-    y <- y[ok]; x <- pt[ok]; pct <- mean(y>0); deviation <- stats::sd(y)
-    if(pct<minimum_pct) { filtered_pct <<- filtered_pct + 1L; return(NULL) }
-    if(!is.finite(deviation) || deviation<minimum_sd) { filtered_sd <<- filtered_sd + 1L; return(NULL) }
-    rho <- suppressWarnings(stats::cor(y,x,method="spearman")); if(!is.finite(rho)) return(NULL)
-    p <- if(abs(rho)>=1) 0 else 2*stats::pt(abs(rho*sqrt((length(y)-2)/pmax(1-rho^2,.Machine$double.eps))),df=length(y)-2,lower.tail=FALSE)
-    data.frame(feature_id=rownames(matrix)[[index]],rho=rho,abs_rho=abs(rho),
-      direction=if(rho>0) "up" else if(rho<0) "down" else "flat",
-      slope=tryCatch(as.numeric(stats::coef(stats::lm(y~x))[[2]]),error=function(error) NA_real_),
-      p_val=p,pct_nonzero=pct,sd_expr=deviation,mean_expr=mean(y),n_used=length(y),
-      n_dropped_na=sum(!ok),stringsAsFactors=FALSE)
-  })
+  rows <- unlist(lapply(chunks, function(view) {
+    matrix <- as.matrix(view$values)
+    lapply(seq_len(nrow(matrix)), function(index) {
+      y <- as.numeric(matrix[index,]); ok <- is.finite(y) & is.finite(pt)
+      if(sum(ok)<10L) { filtered_cells <<- filtered_cells + 1L; return(NULL) }
+      y <- y[ok]; x <- pt[ok]; pct <- mean(y>0); deviation <- stats::sd(y)
+      if(pct<minimum_pct) { filtered_pct <<- filtered_pct + 1L; return(NULL) }
+      if(!is.finite(deviation) || deviation<minimum_sd) { filtered_sd <<- filtered_sd + 1L; return(NULL) }
+      rho <- suppressWarnings(stats::cor(y,x,method="spearman")); if(!is.finite(rho)) return(NULL)
+      p <- if(abs(rho)>=1) 0 else 2*stats::pt(abs(rho*sqrt((length(y)-2)/pmax(1-rho^2,.Machine$double.eps))),df=length(y)-2,lower.tail=FALSE)
+      data.frame(feature_id=rownames(matrix)[[index]],rho=rho,abs_rho=abs(rho),
+        direction=if(rho>0) "up" else if(rho<0) "down" else "flat",
+        slope=tryCatch(as.numeric(stats::coef(stats::lm(y~x))[[2]]),error=function(error) NA_real_),
+        p_val=p,pct_nonzero=pct,sd_expr=deviation,mean_expr=mean(y),n_used=length(y),
+        n_dropped_na=sum(!ok),stringsAsFactors=FALSE)
+    })
+  }), recursive=FALSE)
   rows <- Filter(Negate(is.null),rows)
-  if(length(rows)) { table <- do.call(rbind,rows); table$p_val_adj <- stats::p.adjust(table$p_val,method=as.character(.param(params,"p_adjust_method","BH"))[[1]]); table <- table[order(table$p_val_adj,-table$abs_rho),]; rownames(table)<-NULL }
+  if(length(rows)) { table <- do.call(rbind,rows); table <- table[match(intersect(features, table$feature_id), table$feature_id),,drop=FALSE]; table$p_val_adj <- stats::p.adjust(table$p_val,method=as.character(.param(params,"p_adjust_method","BH"))[[1]]); table <- table[order(table$p_val_adj,-table$abs_rho),]; rownames(table)<-NULL }
   else table <- data.frame(feature_id=character(),rho=numeric(),abs_rho=numeric(),direction=character(),slope=numeric(),p_val=numeric(),p_val_adj=numeric(),pct_nonzero=numeric(),sd_expr=numeric(),mean_expr=numeric(),n_used=integer(),n_dropped_na=integer(),stringsAsFactors=FALSE)
   output <- scworkbench::wb_prim_feature_table(table,"feature_trend_spearman",meta=list(
-    matrix_id=view$matrix_id,n_cells_input=length(pseudotime$cell_id),n_cells_used=length(pt),
-    n_features_input=nrow(matrix),n_features_tested=nrow(table),min_pct_nonzero=minimum_pct,
+    matrix_id=chunks[[1]]$matrix_id,n_cells_input=length(pseudotime$cell_id),n_cells_used=length(pt),
+    n_features_input=length(features),n_features_tested=nrow(table),min_pct_nonzero=minimum_pct,
     min_sd=minimum_sd,p_adjust_method=as.character(.param(params,"p_adjust_method","BH"))[[1]],
     n_filtered_min_cells=filtered_cells,n_filtered_min_pct_nonzero=filtered_pct,
     n_filtered_min_sd=filtered_sd))
