@@ -1,0 +1,325 @@
+{
+  "schema_version": "scwbStatistics.phase3a.historical_read_only.v1",
+  "disposition": "passed",
+  "packs_active": 0,
+  "bundles": [
+    {
+      "path": "/home/dirk/Projects/lymphocyte_trajectory/operator_tests/rc37_cross_operator_continuity_scperturb/stage_b_freeze/bundle/scperturb_operator_b.bundle",
+      "manifest_readable": true,
+      "opened_read_only": true,
+      "fingerprint_before": "03397951ed227e3840e2b311a8c94576fe00d1a7b04e73b335a8219203e30dc6",
+      "fingerprint_after": "03397951ed227e3840e2b311a8c94576fe00d1a7b04e73b335a8219203e30dc6",
+      "unchanged": true,
+      "matching_run_count": 10,
+      "output_count": 18,
+      "runs": [
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_7bopcwjta1cv",
+          "op_name": "cell_vector_association",
+          "contract_hash": "0f4d764067f840845fe6d12e89bd0b55c326b7f2927d79375c83ff26a78f1b49"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_9qndpmmcaiyc",
+          "op_name": "cell_vector_association",
+          "contract_hash": "dff6914e314aa098785858f4dcf82f1dfbcdefe7bf93282ef38fb2251498cdb2"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_hkjppny32j06",
+          "op_name": "cell_vector_association",
+          "contract_hash": "0f4d764067f840845fe6d12e89bd0b55c326b7f2927d79375c83ff26a78f1b49"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_lnl46lozfgnv",
+          "op_name": "cell_vector_association",
+          "contract_hash": "0f4d764067f840845fe6d12e89bd0b55c326b7f2927d79375c83ff26a78f1b49"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_te6jud9k1w5l",
+          "op_name": "cell_vector_association",
+          "contract_hash": "dff6914e314aa098785858f4dcf82f1dfbcdefe7bf93282ef38fb2251498cdb2"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_wkwc7khtoaqo",
+          "op_name": "cell_vector_association",
+          "contract_hash": "0f4d764067f840845fe6d12e89bd0b55c326b7f2927d79375c83ff26a78f1b49"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_xzin1lqhqrkl",
+          "op_name": "cell_vector_association",
+          "contract_hash": "0f4d764067f840845fe6d12e89bd0b55c326b7f2927d79375c83ff26a78f1b49"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_yl802d3ifmfy",
+          "op_name": "de_wilcox",
+          "contract_hash": "1d7fea16a96fbd944dbd875b5998b3326cdb53067b0591e4fa273dad459b100c"
+        },
+        {
+          "snapshot_id": "prov_20260902_175334_g5fngsw5",
+          "run_id": "run_by2wux2qy74a",
+          "op_name": "de_wilcox",
+          "contract_hash": "086d29f3195fe76a144484fe5b26b8fe157ef4ae73d20a268705a57a6330fba4"
+        },
+        {
+          "snapshot_id": "prov_20260903_120801_fcu925nt",
+          "run_id": "run_48van1cg1ylw",
+          "op_name": "cell_vector_association",
+          "contract_hash": "05dd2a652b805c88d6fca4b18ac80581c19d69c0e35b9bdd2397adb1a7019529"
+        }
+      ],
+      "outputs": [
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_7bopcwjta1cv",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_vzp4zwfk"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_7bopcwjta1cv",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_jtg7tbbq"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_9qndpmmcaiyc",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_8mrz8c4j"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_9qndpmmcaiyc",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_u37linyh"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_hkjppny32j06",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_dhqqg88g"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_hkjppny32j06",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_5rqwdbjq"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_lnl46lozfgnv",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_jbmgeszz"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_lnl46lozfgnv",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_c6ltou0h"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_te6jud9k1w5l",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_8trgqe6r"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_te6jud9k1w5l",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_a76eq6el"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_wkwc7khtoaqo",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173909_thg8sae2"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_wkwc7khtoaqo",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173908_f5125krd"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_xzin1lqhqrkl",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173909_dn7h35bj"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_xzin1lqhqrkl",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260902_173909_60g198w1"
+        },
+        {
+          "snapshot_id": "prov_20260902_173909_2x93cjfk",
+          "run_id": "run_yl802d3ifmfy",
+          "output_name": "de_table",
+          "primitive_kind": "feature_table",
+          "artifact_id": "feature_table_20260902_173901_l2gsajwb"
+        },
+        {
+          "snapshot_id": "prov_20260902_175334_g5fngsw5",
+          "run_id": "run_by2wux2qy74a",
+          "output_name": "de_table",
+          "primitive_kind": "feature_table",
+          "artifact_id": "feature_table_20260902_175329_46c11qfy"
+        },
+        {
+          "snapshot_id": "prov_20260903_120801_fcu925nt",
+          "run_id": "run_48van1cg1ylw",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260903_120801_ra4iibs4"
+        },
+        {
+          "snapshot_id": "prov_20260903_120801_fcu925nt",
+          "run_id": "run_48van1cg1ylw",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260903_120801_bvni877r"
+        }
+      ],
+      "loaded_artifacts": {
+        "obs_table_20260902_173908_vzp4zwfk": {
+          "kind": "obs_table",
+          "content_sha256": "97846b444684f781e24c8db6ba6ad9dd370abad8fc8b1c9c1b3955f89669de97"
+        },
+        "obs_table_20260902_173908_jtg7tbbq": {
+          "kind": "obs_table",
+          "content_sha256": "ee3a4f646e3baa2452b8b2b7381e57dfec56eb4ce28ff54d1d970ab5abfc2361"
+        },
+        "obs_table_20260902_173908_8mrz8c4j": {
+          "kind": "obs_table",
+          "content_sha256": "b02aece9a5a1246c95bb345611fbad94ad3737158634bd87cdf1b9a257e76ead"
+        },
+        "obs_table_20260902_173908_u37linyh": {
+          "kind": "obs_table",
+          "content_sha256": "7f0302f35a11dd180ac999a2ae406f0e32a8a262b5f97de15571e2ff9d7c464d"
+        },
+        "obs_table_20260902_173908_dhqqg88g": {
+          "kind": "obs_table",
+          "content_sha256": "b4ff2cf88971d9c595bbe1b8ceec4a4bc8acf9378981049010628442208d7141"
+        },
+        "obs_table_20260902_173908_5rqwdbjq": {
+          "kind": "obs_table",
+          "content_sha256": "8ac01e7bb94ce71f668bfa7532cbf8cee9f9bc5b0b9bde1bba9bd4aa4536a249"
+        },
+        "obs_table_20260902_173908_jbmgeszz": {
+          "kind": "obs_table",
+          "content_sha256": "1695c75c05c98b9a6fbb4c9b98a59e7023bc411e1a55747ec9f40300e10b3562"
+        },
+        "obs_table_20260902_173908_c6ltou0h": {
+          "kind": "obs_table",
+          "content_sha256": "506623830284b2b6d5364c6f6994a9a5c08abdd2d115ebd9bce4f8ffd8a7b8a9"
+        },
+        "obs_table_20260902_173908_8trgqe6r": {
+          "kind": "obs_table",
+          "content_sha256": "3d5811ddf4ed65edc596b2f509bbe51ed068a21fb649bbd80d5339f290d06cd8"
+        },
+        "obs_table_20260902_173908_a76eq6el": {
+          "kind": "obs_table",
+          "content_sha256": "1c9e873ce579cfbedac242634e8a92b3b084cbcb166eb15dc2b1da6ffd399f2b"
+        },
+        "obs_table_20260902_173909_thg8sae2": {
+          "kind": "obs_table",
+          "content_sha256": "7216e175ccc66df69f4fb196fd187dd2f8d2c986398c9ccbe921ac0223860ed4"
+        },
+        "obs_table_20260902_173908_f5125krd": {
+          "kind": "obs_table",
+          "content_sha256": "f4aada1ac9ed6aff1d8eba733f8cb002c2504f83f5e00fc2fcf4df2d113c7a87"
+        },
+        "obs_table_20260902_173909_dn7h35bj": {
+          "kind": "obs_table",
+          "content_sha256": "35d21f48cc892e2044f408a7a8809eb73bb106f82f485eea424137636e97ed9a"
+        },
+        "obs_table_20260902_173909_60g198w1": {
+          "kind": "obs_table",
+          "content_sha256": "0d99daff13a30815bdda677eb294087025e4f04d8fd433c8954d674e67f9cbee"
+        },
+        "feature_table_20260902_173901_l2gsajwb": {
+          "kind": "feature_table",
+          "content_sha256": "cbb891f02380328006b954ab4b96dd3384a9e497686ae67df089508c0b2dd009"
+        },
+        "feature_table_20260902_175329_46c11qfy": {
+          "kind": "feature_table",
+          "content_sha256": "c5f8979f97270175c3b2b6a4d26525a476bf93404ab95022b8c6d22c92f55249"
+        },
+        "obs_table_20260903_120801_ra4iibs4": {
+          "kind": "obs_table",
+          "content_sha256": "065a3704f8da2251186b8305617f1d96b038434694784be968e0ff7d8ce0220c"
+        },
+        "obs_table_20260903_120801_bvni877r": {
+          "kind": "obs_table",
+          "content_sha256": "393a1b6fff0569ce26dc06c881b99b8659005399ef46ef1b93c839ee01a02585"
+        }
+      }
+    },
+    {
+      "path": "/home/dirk/Projects/lymphocyte_trajectory/operator_tests/rc38_target_reproduction_execution/freezes/scperturb/bundle/reproduced.bundle",
+      "manifest_readable": true,
+      "opened_read_only": true,
+      "fingerprint_before": "d4974c1f0a5ae4ad7d717782853fb9f465219b3733fd41048126efca53179d48",
+      "fingerprint_after": "d4974c1f0a5ae4ad7d717782853fb9f465219b3733fd41048126efca53179d48",
+      "unchanged": true,
+      "matching_run_count": 1,
+      "output_count": 2,
+      "runs": [
+        {
+          "snapshot_id": "prov_20260904_170027_uurqr5sy",
+          "run_id": "run_5tng9ilfvz3g",
+          "op_name": "cell_vector_association",
+          "contract_hash": "05dd2a652b805c88d6fca4b18ac80581c19d69c0e35b9bdd2397adb1a7019529"
+        }
+      ],
+      "outputs": [
+        {
+          "snapshot_id": "prov_20260904_170027_uurqr5sy",
+          "run_id": "run_5tng9ilfvz3g",
+          "output_name": "detail",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260904_170027_243js9o4"
+        },
+        {
+          "snapshot_id": "prov_20260904_170027_uurqr5sy",
+          "run_id": "run_5tng9ilfvz3g",
+          "output_name": "summary",
+          "primitive_kind": "obs_table",
+          "artifact_id": "obs_table_20260904_170026_dy6klu89"
+        }
+      ],
+      "loaded_artifacts": {
+        "obs_table_20260904_170027_243js9o4": {
+          "kind": "obs_table",
+          "content_sha256": "065a3704f8da2251186b8305617f1d96b038434694784be968e0ff7d8ce0220c"
+        },
+        "obs_table_20260904_170026_dy6klu89": {
+          "kind": "obs_table",
+          "content_sha256": "393a1b6fff0569ce26dc06c881b99b8659005399ef46ef1b93c839ee01a02585"
+        }
+      }
+    }
+  ]
+}

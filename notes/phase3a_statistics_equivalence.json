@@ -1,0 +1,325 @@
+{
+  "schema_version": "scwbStatistics.phase3a.equivalence.v1",
+  "disposition": "passed",
+  "source": {
+    "base_scworkbench_commit": "42d0c09a8c4abae2174bbbf12741c7303fde32e0",
+    "candidate_scworkbench_commit": "8646fb9191589512ded04c345751f0a5a2622e90",
+    "candidate_scwbStatistics_commit": "4a6f545246a7582beedb7b0d239fc82ac84a1f3e"
+  },
+  "fixture_identity": "de39c705b99367dba9709e7cc390b7aee5eb1c4e8ffb8ee683ffecec319d4192",
+  "intentional_exclusions": ["ephemeral run identifier", "execution timestamp", "qualified operation name", "pack and operation-definition identities", "runtime and installation paths"],
+  "identity_transition": {
+    "historical_unqualified_definition_preserved": true,
+    "prospective_namespace": "scwbstatistics",
+    "pack": {
+      "pack_identity": {
+        "scheme": "scworkbench.operation_pack.pack.v2",
+        "sha256": "f2d877cfe0efd73858dc4f74f3820664b0e6b19e96a54183ebdbdbc13de7bae8"
+      },
+      "manifest_source_identity": {
+        "scheme": "scworkbench.operation_pack.manifest_source.bytes.v1",
+        "sha256": "2f043cef73057b892948ab646ae5b3e36a0f56e4a4c95f512e192dc9166f76f4"
+      },
+      "manifest_identity": {
+        "scheme": "scworkbench.operation_pack.manifest.v2",
+        "sha256": "419eb0c82891620650b9b27e4e7efa7fc4b8d5828ed13e36ec6178a3283c4fc1"
+      },
+      "distribution_identity": {
+        "scheme": "scworkbench.operation_pack.content.v1",
+        "sha256": "93d3b49897dbb9415a9542188342698b8fc8476c67ccbe7a88d49aa97af63359"
+      },
+      "entry_point_identity": {
+        "scheme": "scworkbench.operation_pack.entry_point.v2",
+        "sha256": "fc66ea2a37b421f4e04836745be756a3c4d77785e73c72d44d68b537c1cfa06c"
+      },
+      "operation_definition_identities": {
+        "scwbstatistics::de_wilcox": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "233bf69f486ba4eb37d65b94c849406719133b17853a049e3e4f3911391bccc7"
+        },
+        "scwbstatistics::markers_topn": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "d5f885e5f28ff8f82b4b02292f086301b9fb40434f436ea2ed94f0cb8a9a4471"
+        },
+        "scwbstatistics::cell_vector_assoc": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "73a60765c9810c1739cb8c8e0001ddb0e3b21b2157216d1fc3cae40b01334c24"
+        },
+        "scwbstatistics::cell_vector_association": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "f44b69acb967595e16297825e1a80026f4a79b7d5579b9392c9b4f639f156bd7"
+        },
+        "scwbstatistics::cell_vector_compare": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "ace0ef6969b24f98e4cd7ca12fbeb43122e48ea662286fda549262bac67a3407"
+        },
+        "scwbstatistics::feature_trend_spearman": {
+          "scheme": "scworkbench.operation_pack.definition.v2",
+          "sha256": "1e7246daef9c6aafdfe9974ebe980896fc4c1a3a02a90fbc3efcc470beff70f6"
+        }
+      }
+    }
+  },
+  "interface_checks": {
+    "de_wilcox": {
+      "name": "de_wilcox",
+      "passed": true
+    },
+    "markers_topn": {
+      "name": "markers_topn",
+      "passed": true
+    },
+    "cell_vector_assoc": {
+      "name": "cell_vector_assoc",
+      "passed": true
+    },
+    "cell_vector_association": {
+      "name": "cell_vector_association",
+      "passed": true
+    },
+    "cell_vector_compare": {
+      "name": "cell_vector_compare",
+      "passed": true
+    },
+    "feature_trend_spearman": {
+      "name": "feature_trend_spearman",
+      "passed": true
+    }
+  },
+  "execution_checks": [
+    {
+      "name": "de_wilcox",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "de_table": "9d6f0d30e9565da0aeb461d770782a1d856aa2272ce233358a7e7431e792614a"
+      }
+    },
+    {
+      "name": "markers_topn",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "markers": "696769686ce5f644e3bae8e2e53647e47423b7961348fe4f13eb96501a0115d8"
+      }
+    },
+    {
+      "name": "cell_vector_assoc",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "assoc_summary": "f17f1a6c87c14375199d68d79476a2a9c387291dd7867652e3d34947de94f029",
+        "group_stats": "7c8f5f2323857b23efe70284e288bb09a45023f6153c3c77067c5c2e202c31fe"
+      }
+    },
+    {
+      "name": "cell_vector_association_categorical",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "detail": "a4e387f61d736f25721b0a49c73f5a993496c7e18b428a1e5484cfdd23cade76",
+        "summary": "7119ac7207c3ef96642248b1f5071e0d783c4bbb81b8a890531c9d971f97059a"
+      }
+    },
+    {
+      "name": "cell_vector_association_grouped",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "detail": "7c8f5f2323857b23efe70284e288bb09a45023f6153c3c77067c5c2e202c31fe",
+        "summary": "6d46d40fd26a0e8686ca5ebe62256a81f359ee6ca13ed83764a05d4bd9cb4b84"
+      }
+    },
+    {
+      "name": "cell_vector_association_continuous",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "detail": "a6cde69db416be6d2a2109ce69ba2b90c702d609afb24c62d1e51404344698e8",
+        "summary": "82be20ef3d2c63547700778ad4a09b0b2a15f6333b5331a489331140dd080522"
+      }
+    },
+    {
+      "name": "cell_vector_compare",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "comparison": "3ac00784b5df9d8e291416bda22de7e380da6c0e9e1cb2cecfc37a013ef0dd8b",
+        "summary": "35285841a84adb4dcfadb6353ffe2e27a9af2c91cb36531d1c158d0ce460fe36"
+      }
+    },
+    {
+      "name": "feature_trend_chunked",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "trend_table": "2df8e57d1536648958d669df176425df4c166f8bb6df9cec692ac7d751d85906"
+      }
+    },
+    {
+      "name": "feature_trend_unchunked",
+      "passed": true,
+      "fields": [
+        {
+          "name": "inputs",
+          "passed": true
+        },
+        {
+          "name": "effective_params",
+          "passed": true
+        },
+        {
+          "name": "outputs",
+          "passed": true
+        },
+        {
+          "name": "output_identities",
+          "passed": true
+        }
+      ],
+      "output_identities": {
+        "trend_table": "2df8e57d1536648958d669df176425df4c166f8bb6df9cec692ac7d751d85906"
+      }
+    }
+  ],
+  "terminal_policy_checks": {
+    "feature_trend_chunked_equals_unchunked": true,
+    "policy": "exact_canonical_value"
+  }
+}
