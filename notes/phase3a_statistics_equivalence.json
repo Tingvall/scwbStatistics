@@ -3,8 +3,8 @@
   "disposition": "passed",
   "source": {
     "base_scworkbench_commit": "42d0c09a8c4abae2174bbbf12741c7303fde32e0",
-    "candidate_scworkbench_commit": "8646fb9191589512ded04c345751f0a5a2622e90",
-    "candidate_scwbStatistics_commit": "afca4fc0cb0144dbf7224ac33f22e6d2a73d8007"
+    "candidate_scworkbench_commit": "a94f3ac2bb07b18e2645bde2960eb63613ae99eb",
+    "candidate_scwbStatistics_commit": "2e3da682198e7e993fd66024cfb106ff05135f06"
   },
   "fixture_identity": "de39c705b99367dba9709e7cc390b7aee5eb1c4e8ffb8ee683ffecec319d4192",
   "intentional_exclusions": ["ephemeral run identifier", "execution timestamp", "qualified operation name", "pack and operation-definition identities", "runtime and installation paths"],
@@ -14,19 +14,19 @@
     "pack": {
       "pack_identity": {
         "scheme": "scworkbench.operation_pack.pack.v2",
-        "sha256": "7aa3200efbab423ddae1e9624a77e86a3a27bbfe10de63f8779d2e1298d0380d"
+        "sha256": "c6049b36e74ded0182bd601ee2a5103b161f9fe7341cf568b3a9498b5fd3b1cb"
       },
       "manifest_source_identity": {
         "scheme": "scworkbench.operation_pack.manifest_source.bytes.v1",
-        "sha256": "2f043cef73057b892948ab646ae5b3e36a0f56e4a4c95f512e192dc9166f76f4"
+        "sha256": "14b4610595e255f199c58748e387981b294825a145a3ffffa2e0c5e309c175ad"
       },
       "manifest_identity": {
         "scheme": "scworkbench.operation_pack.manifest.v2",
-        "sha256": "419eb0c82891620650b9b27e4e7efa7fc4b8d5828ed13e36ec6178a3283c4fc1"
+        "sha256": "96f4fbe8f12d1842e7d57da142fb4942dd5b023cce02b7f1f5f9bbc90e26d0cb"
       },
       "distribution_identity": {
         "scheme": "scworkbench.operation_pack.content.v1",
-        "sha256": "b288c0d90f06ccc21b205edabf144d343128b2ddbdbc6155d6173ef4cb2f7257"
+        "sha256": "cf95e86dd492b60ff8a957664ef928566b09457b8bd5c5b23ac953dae133938e"
       },
       "entry_point_identity": {
         "scheme": "scworkbench.operation_pack.entry_point.v2",
@@ -35,27 +35,27 @@
       "operation_definition_identities": {
         "scwbstatistics::de_wilcox": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "233bf69f486ba4eb37d65b94c849406719133b17853a049e3e4f3911391bccc7"
+          "sha256": "dca55697427cede0ef77a2d29399b5db6ddd163111c6b886d158ec356a5583d6"
         },
         "scwbstatistics::markers_topn": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "d5f885e5f28ff8f82b4b02292f086301b9fb40434f436ea2ed94f0cb8a9a4471"
+          "sha256": "c2c82d51918368a6a1da8a7fda2c95720265a89e8161745e5e1c95b93e881d9b"
         },
         "scwbstatistics::cell_vector_assoc": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "73a60765c9810c1739cb8c8e0001ddb0e3b21b2157216d1fc3cae40b01334c24"
+          "sha256": "8c29eda950bffd0d9bad3a5f0d12bd2562fad5e9c51d8bec6a740a5902a37978"
         },
         "scwbstatistics::cell_vector_association": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "f44b69acb967595e16297825e1a80026f4a79b7d5579b9392c9b4f639f156bd7"
+          "sha256": "3325465e1afcb766abb03810d35c166920db98bcf94a2f593b54e8d25b9f44df"
         },
         "scwbstatistics::cell_vector_compare": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "ace0ef6969b24f98e4cd7ca12fbeb43122e48ea662286fda549262bac67a3407"
+          "sha256": "0d6e62442271c553ac803d89296040878c2c3bd143b1eb7b91a4a0711289f6a7"
         },
         "scwbstatistics::feature_trend_spearman": {
           "scheme": "scworkbench.operation_pack.definition.v2",
-          "sha256": "1e7246daef9c6aafdfe9974ebe980896fc4c1a3a02a90fbc3efcc470beff70f6"
+          "sha256": "e6c6ebc993c3e119c407bf88f3b76ab43bbf280a27de9ef65d9136f0f43112d4"
         }
       }
     }
@@ -320,6 +320,33 @@
   ],
   "terminal_policy_checks": {
     "feature_trend_chunked_equals_unchunked": true,
+    "core_observed_reader_trace": true,
+    "chunked": {
+      "enabled": true,
+      "axis": "features",
+      "chunk_size": 2,
+      "n_chunks": 3,
+      "requested_chunk_size": 2,
+      "observed_call_count": 3,
+      "observed_batch_sizes": [2, 2, 1],
+      "observed_batches": [
+        ["gene_1", "gene_2"],
+        ["gene_3", "gene_4"],
+        "gene_5"
+      ]
+    },
+    "unchunked": {
+      "enabled": false,
+      "axis": "features",
+      "chunk_size": 128,
+      "n_chunks": 1,
+      "requested_chunk_size": 128,
+      "observed_call_count": 1,
+      "observed_batch_sizes": 5,
+      "observed_batches": [
+        ["gene_1", "gene_2", "gene_3", "gene_4", "gene_5"]
+      ]
+    },
     "policy": "exact_canonical_value"
   }
 }
