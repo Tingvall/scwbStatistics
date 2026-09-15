@@ -4,7 +4,7 @@
   "source": {
     "base_scworkbench_commit": "42d0c09a8c4abae2174bbbf12741c7303fde32e0",
     "candidate_scworkbench_commit": "8646fb9191589512ded04c345751f0a5a2622e90",
-    "candidate_scwbStatistics_commit": "4a6f545246a7582beedb7b0d239fc82ac84a1f3e"
+    "candidate_scwbStatistics_commit": "afca4fc0cb0144dbf7224ac33f22e6d2a73d8007"
   },
   "fixture_identity": "de39c705b99367dba9709e7cc390b7aee5eb1c4e8ffb8ee683ffecec319d4192",
   "intentional_exclusions": ["ephemeral run identifier", "execution timestamp", "qualified operation name", "pack and operation-definition identities", "runtime and installation paths"],
@@ -14,7 +14,7 @@
     "pack": {
       "pack_identity": {
         "scheme": "scworkbench.operation_pack.pack.v2",
-        "sha256": "f2d877cfe0efd73858dc4f74f3820664b0e6b19e96a54183ebdbdbc13de7bae8"
+        "sha256": "7aa3200efbab423ddae1e9624a77e86a3a27bbfe10de63f8779d2e1298d0380d"
       },
       "manifest_source_identity": {
         "scheme": "scworkbench.operation_pack.manifest_source.bytes.v1",
@@ -26,7 +26,7 @@
       },
       "distribution_identity": {
         "scheme": "scworkbench.operation_pack.content.v1",
-        "sha256": "93d3b49897dbb9415a9542188342698b8fc8476c67ccbe7a88d49aa97af63359"
+        "sha256": "b288c0d90f06ccc21b205edabf144d343128b2ddbdbc6155d6173ef4cb2f7257"
       },
       "entry_point_identity": {
         "scheme": "scworkbench.operation_pack.entry_point.v2",
