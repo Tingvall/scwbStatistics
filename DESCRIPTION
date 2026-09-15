@@ -15,4 +15,6 @@ Imports:
     stats,
     utils
 Suggests:
-    jsonlite
+    devtools,
+    jsonlite,
+    Matrix

@@ -1,0 +1,22 @@
+{
+  "schema_version": "scwbStatistics.phase3a.legacy_replay_input_precedence.v1",
+  "disposition": "archived_migration_evidence",
+  "operation": "cell_vector_association",
+  "accepted_identities": {
+    "old_core_commit": "42d0c09a8c4abae2174bbbf12741c7303fde32e0",
+    "new_core_commit": "8ba113f0942e63be83dc46d1b94326375a9995d5",
+    "new_pack_commit": "381c715eff6290d91d8c4e66f6783293a1287abb"
+  },
+  "legacy_collision": {
+    "symbolic_input": {"method": "auto"},
+    "retained_parameter": {"method": "fisher_exact"},
+    "effective_value": {"method": "auto"},
+    "rule": "symbolic_execution_input_precedes_legacy_retained_parameter_v1"
+  },
+  "comparator_evidence": {
+    "path": "notes/phase3a_statistics_equivalence.json",
+    "sha256": "d22cad5eeed35075f9b17ad4399a66b0135b8f36b88cfe5878f0d9e1c094d9e5",
+    "fixture_identity": "de39c705b99367dba9709e7cc390b7aee5eb1c4e8ffb8ee683ffecec319d4192"
+  },
+  "permanent_test_discovery": false
+}
