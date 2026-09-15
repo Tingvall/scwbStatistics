@@ -28,4 +28,3 @@ returns `assoc_summary` plus `group_stats`. `cell_vector_association` is a
 semantically distinct typed dispatcher supporting categorical/categorical,
 continuous/categorical, and continuous/continuous inputs and returns `summary`
 plus method-specific `detail`. Neither operation is an alias.
-

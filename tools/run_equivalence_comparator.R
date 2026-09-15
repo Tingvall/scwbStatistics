@@ -106,4 +106,3 @@ writeLines(json, output, useBytes = TRUE)
 cat(sprintf("PHASE3A_EQUIVALENCE %s interfaces=%d cases=%d output=%s\n",
   evidence$disposition, length(interface_checks), length(case_checks), output))
 if (!passed) quit(status = 1L)
-

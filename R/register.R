@@ -18,4 +18,3 @@ register_operation_pack <- function() {
     )
   )
 }
-
