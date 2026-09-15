@@ -1,0 +1,18 @@
+Package: scwbStatistics
+Type: Package
+Title: Statistical Operations for scworkbench
+Version: 0.1.0
+Authors@R: person("scworkbench", "Maintainers", role = c("aut", "cre"), email = "maintainers@example.org")
+Description: Explicitly activated operation-pack ABI v2 implementations of
+    terminal differential, marker, association, comparison, and feature-trend
+    statistics for scworkbench. Installation is inert; scworkbench remains the
+    sole owner of bundle state, staging, publication, and provenance.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    scworkbench,
+    stats,
+    utils
+Suggests:
+    jsonlite

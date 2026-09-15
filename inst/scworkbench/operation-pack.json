@@ -1,0 +1,155 @@
+{
+  "schema_version": "scworkbench.operation_pack.v2",
+  "pack_abi_version": "2",
+  "identity_scheme": "scworkbench.operation_pack.canonical_json.v1",
+  "namespace": "scwbstatistics",
+  "package": {"name": "scwbStatistics", "version": "0.1.0"},
+  "backend": "R",
+  "compatibility": {
+    "scworkbench": {"minimum": "0.1.0", "maximum_exclusive": "0.2.0"},
+    "pack_abi": {"minimum": "2", "maximum": "2"}
+  },
+  "entry_point": "scwbStatistics::register_operation_pack",
+  "operations": [
+    {
+      "name": "de_wilcox",
+      "qualified_name": "scwbstatistics::de_wilcox",
+      "title": "Differential Expression (Wilcoxon)",
+      "description": "Wilcoxon rank-sum DE between two cell groups (A vs B).",
+      "runner": ".run_de_wilcox",
+      "inputs": [{"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"}],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "group_a": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "group_b": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "features": {"type": ["array", "null"], "default": null, "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "min_pct": {"type": "number", "default": 0, "minimum": 0, "maximum": 1},
+          "p_adjust_method": {"type": "string", "default": "BH", "minLength": 1}
+        },
+        "required": ["group_a", "group_b"],
+        "additionalProperties": false
+      },
+      "outputs": [{"name": "de_table", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "de_table_id", "required": true, "promotion_group": "de_table", "table_type": "de_wilcox"}],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "wilcox.test"}
+      ],
+      "promotion_closure": {"de_table": ["de_table"]},
+      "replay_equivalence": {"de_table": "exact_canonical_value"}
+    },
+    {
+      "name": "markers_topn",
+      "qualified_name": "scwbstatistics::markers_topn",
+      "title": "Top Markers Per Cluster",
+      "description": "One-versus-rest Wilcoxon marker ranking for each cluster.",
+      "runner": ".run_markers_topn",
+      "inputs": [
+        {"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"},
+        {"name": "clusters", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "features": {"type": ["array", "null"], "default": null, "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "top_n": {"type": "integer", "default": 20, "minimum": 1, "maximum": 1000},
+          "min_pct": {"type": "number", "default": 0.1, "minimum": 0, "maximum": 1},
+          "p_adjust_method": {"type": "string", "default": "BH", "minLength": 1}
+        },
+        "additionalProperties": false
+      },
+      "outputs": [{"name": "markers", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "markers_id", "required": true, "promotion_group": "markers", "table_type": "markers_topn"}],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "wilcox.test"}
+      ],
+      "promotion_closure": {"markers": ["markers"]},
+      "replay_equivalence": {"markers": "exact_canonical_value"}
+    },
+    {
+      "name": "cell_vector_assoc",
+      "qualified_name": "scwbstatistics::cell_vector_assoc",
+      "title": "Cell Vector Association",
+      "description": "Test whether a continuous cell-level signal differs across groups defined by a categorical cell-level vector.",
+      "runner": ".run_cell_vector_assoc",
+      "inputs": [
+        {"name": "vector_cont", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
+        {"name": "vector_group", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
+      ],
+      "params_schema": {"type": "object", "properties": {"min_n_per_group": {"type": "integer", "default": 3, "minimum": 1, "maximum": 100000}}, "additionalProperties": false},
+      "outputs": [
+        {"name": "assoc_summary", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "assoc_summary_id", "required": true, "promotion_group": "assoc_summary", "table_type": "cell_vector_assoc"},
+        {"name": "group_stats", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "group_stats_id", "required": true, "promotion_group": "group_stats", "table_type": "cell_vector_assoc_group_stats"}
+      ],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_obs_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "kruskal.test"}
+      ],
+      "promotion_closure": {"assoc_summary": ["assoc_summary"], "group_stats": ["group_stats"]},
+      "replay_equivalence": {"assoc_summary": "exact_canonical_value", "group_stats": "exact_canonical_value"}
+    },
+    {
+      "name": "cell_vector_association",
+      "qualified_name": "scwbstatistics::cell_vector_association",
+      "title": "Cell Vector Association",
+      "description": "Associate two typed cell vectors with categorical and continuous dispatch.",
+      "runner": ".run_cell_vector_association",
+      "inputs": [
+        {"name": "a", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
+        {"name": "b", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
+      ],
+      "params_schema": {"type": "object", "properties": {"min_n_per_group": {"type": "integer", "default": 3, "minimum": 1, "maximum": 100000}, "method": {"type": "string", "default": "auto", "enum": ["auto", "chisq", "fisher", "kruskal_anova", "correlation"]}}, "additionalProperties": false},
+      "outputs": [
+        {"name": "summary", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "summary_id", "required": true, "promotion_group": "summary", "table_type": "cell_vector_association_summary"},
+        {"name": "detail", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "detail_id", "required": true, "promotion_group": "detail", "table_type": "cell_vector_association_detail"}
+      ],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_obs_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "cor.test"}
+      ],
+      "promotion_closure": {"summary": ["summary"], "detail": ["detail"]},
+      "replay_equivalence": {"summary": "exact_canonical_value", "detail": "exact_canonical_value"}
+    },
+    {
+      "name": "cell_vector_compare",
+      "qualified_name": "scwbstatistics::cell_vector_compare",
+      "title": "Cell Vector Comparison",
+      "description": "Compare two cell-level signals on their shared cell universe in raw or rank space.",
+      "runner": ".run_cell_vector_compare",
+      "inputs": [
+        {"name": "a", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"},
+        {"name": "b", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
+      ],
+      "params_schema": {"type": "object", "properties": {"compare_space": {"type": "string", "default": "rank", "enum": ["raw", "rank"]}, "ties_method": {"type": "string", "default": "average", "enum": ["average", "first", "last", "random", "max", "min"]}, "signal_a": {"type": "string", "default": "a", "minLength": 1}, "signal_b": {"type": "string", "default": "b", "minLength": 1}}, "additionalProperties": false},
+      "outputs": [
+        {"name": "summary", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "summary_id", "required": true, "promotion_group": "summary", "table_type": "cell_vector_compare_summary"},
+        {"name": "comparison", "category": "terminal_artifact", "kind": "obs_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "comparison_id", "required": true, "promotion_group": "comparison", "table_type": "cell_vector_compare"}
+      ],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_obs_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "cor"}
+      ],
+      "promotion_closure": {"summary": ["summary"], "comparison": ["comparison"]},
+      "replay_equivalence": {"summary": "exact_canonical_value", "comparison": "exact_canonical_value"}
+    },
+    {
+      "name": "feature_trend_spearman",
+      "qualified_name": "scwbstatistics::feature_trend_spearman",
+      "title": "Feature Trends vs Continuous Vector",
+      "description": "Feature-level Spearman trend testing against continuous pseudotime-like vectors.",
+      "runner": ".run_feature_trend_spearman",
+      "inputs": [
+        {"name": "matrix", "kind": "matrix", "required": true, "alignment": "cell_and_feature_ordered"},
+        {"name": "pseudotime", "kind": "cell_vector", "required": true, "alignment": "cell_ordered"}
+      ],
+      "params_schema": {"type": "object", "properties": {"features": {"type": ["array", "null"], "default": null, "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "min_pct_nonzero": {"type": "number", "default": 0, "minimum": 0, "maximum": 1}, "min_sd": {"type": "number", "default": 0, "minimum": 0, "maximum": 1000000}, "p_adjust_method": {"type": "string", "default": "BH", "minLength": 1}, "chunk_size": {"type": "integer", "default": 128, "minimum": 1, "maximum": 4096}}, "additionalProperties": false},
+      "outputs": [{"name": "trend_table", "category": "terminal_artifact", "kind": "feature_table", "storage_profile": "terminal_primitive_v1", "allocated_id_key": "trend_table_id", "required": true, "promotion_group": "trend_table", "table_type": "feature_trend_spearman"}],
+      "dependencies": [
+        {"requirement_id": "scworkbench_runtime", "kind": "r_package", "name": "scworkbench", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=0.1.0,<0.2.0"}, "disposition": "required", "import_probe": "wb_prim_feature_table"},
+        {"requirement_id": "stats_runtime", "kind": "r_package", "name": "stats", "version": {"scheme": "r_package_version_constraint_v1", "specifier": ">=4.1.0"}, "disposition": "required", "import_probe": "cor"}
+      ],
+      "promotion_closure": {"trend_table": ["trend_table"]},
+      "replay_equivalence": {"trend_table": "exact_canonical_value"}
+    }
+  ]
+}
